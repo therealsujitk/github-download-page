@@ -1,6 +1,7 @@
 import { AppBar, Avatar, Box, Link, Stack, Toolbar, useMediaQuery } from '@mui/material';
 import Header from './header';
 import Body from './body';
+import developerIcon from './assets/developer-icon.png';
 import { useEffect, useState } from 'react';
 
 function HomePage() {
@@ -33,7 +34,7 @@ function HomePage() {
     <Box sx={{overflow: 'hidden'}}>
       <AppBar position="fixed" elevation={appBarElevation} sx={{backgroundImage: 'none', borderRadius: 0}}>
         <Toolbar>
-          <Avatar alt={window.siteConfiguration.developer.name} src={window.siteConfiguration.developer.logo ?? 'no-image.jpg'} sx={{mr: 4}} />
+          <Avatar alt={window.siteConfiguration.developer.name} src={window.siteConfiguration.developer.logo ?? developerIcon} sx={{mr: 4}} />
           <Stack direction="row" spacing={2} alignItems="center">
             {(window.siteConfiguration.site.links).map((l, i) => <Link key={i} href={l.href} underline="hover">{l.name}</Link>)}
           </Stack>
