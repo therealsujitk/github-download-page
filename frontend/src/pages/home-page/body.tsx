@@ -1,5 +1,5 @@
 import { BugReport, ChevronLeft, ChevronRight, ExpandLess, ExpandMore, GitHub, Public, ShieldOutlined } from "@mui/icons-material";
-import { Box, Button, IconButton, ImageList, ImageListItem, Stack, Theme, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, IconButton, Stack, Theme, Typography, useMediaQuery } from "@mui/material";
 import { createRef, useEffect, useState } from "react";
 
 function Preview() {
