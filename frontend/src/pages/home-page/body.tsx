@@ -3,6 +3,8 @@ import { Box, Button, IconButton, ImageList, ImageListItem, Stack, Theme, Typogr
 import { createRef, useEffect, useState } from "react";
 
 function Preview() {
+  const greaterThan1280 = useMediaQuery('(min-width:1280px)');
+
   const screenshotContext = require.context('./assets/screenshots', false, /\.(jpe?g|png|gif|svg|webp)$/);
   const screenshots = screenshotContext.keys().map(screenshotContext) as string[];
 
@@ -16,14 +18,14 @@ function Preview() {
 
   useEffect(() => {
     if (containerRef.current) {
-      toggleRight(containerRef.current.scrollLeft + containerRef.current.clientWidth !== containerRef.current.scrollWidth);
+      toggleRight(Math.round(containerRef.current.scrollLeft + containerRef.current.offsetWidth) < Math.round(containerRef.current.scrollWidth));
     }
 
     const element = containerRef.current;
     const handleOnContainerScroll = () => {
       if (containerRef.current === null) return;
-      toggleLeft(containerRef.current.scrollLeft !== 0);
-      toggleRight(containerRef.current.scrollLeft + containerRef.current.clientWidth !== containerRef.current.scrollWidth);
+      toggleLeft(containerRef.current.scrollLeft > 0);
+      toggleRight(Math.round(containerRef.current.scrollLeft + containerRef.current.offsetWidth) < Math.round(containerRef.current.scrollWidth));
     }
 
     element?.addEventListener("scroll", handleOnContainerScroll);
@@ -50,21 +52,19 @@ function Preview() {
 
   return (
     <Box sx={{position: 'relative'}}>
-      <Box sx={{overflow: 'auto'}}>
-        <ImageList sx={{
-          gridAutoFlow: "column",
-          gridTemplateColumns: "repeat(auto-fill,minmax(160px, 1fr)) !important",
-          gridAutoColumns: "minmax(160px, 1fr)",
+      <Box sx={{overflow: 'auto', '&::-webkit-scrollbar': { display: 'none' }}} ref={containerRef}>
+        <Box sx={{
           paddingTop: 1,
           paddingBottom: 1,
-          '&::-webkit-scrollbar': { display: 'none' },
-        }} gap={15} ref={containerRef}>
+          display: 'flex',
+          height: greaterThan1280 ? '325px' : '225px',
+        }} gap={2} ref={containerRef}>
           {screenshots.map((s, i) => (
-            <ImageListItem key={i} sx={{borderRadius: 8, boxShadow: 5}}>
-              <img alt="Application Preview" src={s} style={{borderRadius: 8}} />
-            </ImageListItem>
+            <Box key={i} sx={{borderRadius: 8, boxShadow: 5, height: '100%'}}>
+              <img alt="Application Preview" src={s} style={{borderRadius: 8, height: '100%'}} />
+            </Box>
           ))}
-        </ImageList>
+        </Box>
       </Box>
       {isLeftVisible && <Box sx={{left: 0, transform: 'translate(-50%, 0)', ...scrollButtonContainerStyle}}>
         <Button onClick={onLeftClick} size="large" variant="contained" sx={scrollButtonStyle}>
