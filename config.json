@@ -1,0 +1,39 @@
+{
+  "application": {
+    "name": "Material Components Catalog",
+    "versionName": null,
+    "versionCode": null,
+    "tagName": null,
+    "description": "This is a download page for your GitHub project inspired by Google Play Store. As an example I have used the material components for android catalog app to showcase this site. Click the GitHub link in the navigation bar to see how to get your own copy.",
+    "website": "https://github.com/material-components/material-components-android",
+    "github": "material-components/material-components-android",
+    "bugs": "https://github.com/material-components/material-components-androi/issues",
+    "downloadLink": null,
+    "info": {
+      "minimumRequirement": "Android 6.0+",
+      "releasedOn": "Nov 15, 2018"
+    }
+  },
+  "developer": {
+    "name": "Google LLC",
+    "logo": "https://lh3.googleusercontent.com/COxitqgJr1sJnIDe8-jiKhxDx1FrYbtRHKJ9z_hELisAlapwE9LUPh6fcXIfb5vwpbMl4xl9H9TRFPc5NOO8Sb3VSgIBrfRYvW6cUA",
+    "website": "https://android.com"
+  },
+  "site": {
+    "primaryColor": "#03875F",
+    "links": [
+      {
+        "name": "GitHub",
+        "href": "https://github.com/therealsujitk/github-download-page"
+      },
+      {
+        "name": "Developer",
+        "href": "https://therealsuji.tk"
+      },
+      {
+        "name": "Donate",
+        "href": "https://therealsuji.tk/donate"
+      }
+    ]
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "name": "github-download-page",
+  "version": "1.0.0",
+  "description": "A beautiful download page for your GitHub project.",
+  "private": true,
+  "exports": "./bin/server.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npm run build:frontend && rm -rf dist && tsc -p .",
+    "build:frontend": "cd frontend && npm run build",
+    "postbuild": "mkdir dist/frontend && cp -r frontend/build dist/frontend/build",
+    "dev": "ts-node-esm -r dotenv/config -r tsconfig-paths/register bin/server.ts",
+    "start": "node dist/bin/server.js",
+    "preinstall": "cd frontend && npm i",
+    "vercel-build": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/therealsujitk/github-download-page.git"
+  },
+  "keywords": [
+    "Download Page",
+    "GitHub"
+  ],
+  "author": "Sujit Kumar <social@therealsuji.tk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/therealsujitk/github-download-page/issues"
+  },
+  "homepage": "https://github.com/therealsujitk/github-download-page#readme",
+  "dependencies": {
+    "@types/express": "^4.17.19",
+    "@types/got": "^9.6.12",
+    "@types/node": "^20.8.6",
+    "date-fns": "^2.30.0",
+    "express": "^4.18.2",
+    "got": "^11.8.2",
+    "node-cache": "^5.1.2",
+    "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "dotenv": "^16.3.1",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0"
+  }
+}
