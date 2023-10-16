@@ -1,4 +1,5 @@
-import { HomePage, ErrorPage } from './pages';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { HomePage, ErrorPage, PrivacyPolicy } from './pages';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 
 if (!window.siteConfiguration) {
@@ -78,12 +79,27 @@ const theme = createTheme({
 });
 
 function App() {
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <HomePage />,
+    },
+    {
+      path: '/privacy-policy',
+      element: <PrivacyPolicy />,
+    },
+    {
+      path: '/*',
+      element: <ErrorPage error={404} />,
+    }
+  ]);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {
         window.siteConfiguration.site.statusCode === 200
-        ? <HomePage /> 
+        ? <RouterProvider router={router} />
         : <ErrorPage error={window.siteConfiguration.site.statusCode} />
       }
     </ThemeProvider>

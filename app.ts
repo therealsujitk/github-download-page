@@ -10,7 +10,15 @@ var app = express();
 app.use(express.static(path.join(__dirname, '/frontend/build'), { index: false }));
 app.get('/', async (_: any, res: any) => {
   try {
-    res.status(200).send(await loadIndex(200));
+    res.status(200).send(await loadIndex(200, '/'));
+  } catch (error) {
+    res.status(500).send(await loadIndex(500));
+  }
+});
+
+app.get('/privacy-policy', async (_: any, res: any) => {
+  try {
+    res.status(200).send(await loadIndex(200, '/privacy-policy'));
   } catch (error) {
     res.status(500).send(await loadIndex(500));
   }
@@ -76,21 +84,28 @@ app.get('/*', async (_: any, res: any) => {
   }
 });
 
-async function loadIndex(statusCode: number) {
+async function loadIndex(statusCode: number, route: string|undefined = undefined) {
   let index = fs.readFileSync(__dirname + '/frontend/build/index.html').toString();
   const siteConfiguration: any = Config;
   siteConfiguration.site.statusCode = statusCode;
 
   if (statusCode === 200) {
-    const release = await getRelease();
+    switch (route) {
+      case '/privacy-policy':
+        index = index.replace(/__SITE_TITLE__/g, 'Privacy Policy');
+        index = index.replace(/__SITE_DESCRIPTION__/g, '');
+      default:
+        const release = await getRelease();
 
-    siteConfiguration.application.downloads = await GitHub.getDownloadCount();
-    siteConfiguration.application.size = release['assets'][0]?.['size'] ?? NaN;
-    siteConfiguration.application.versionName = siteConfiguration.application.versionName ?? await getTagName();
-    siteConfiguration.application.info.updatedOn = format(new Date(release['published_at']), 'MMM d, yyyy');
+        siteConfiguration.application.downloads = await GitHub.getDownloadCount();
+        siteConfiguration.application.size = release['assets'][0]?.['size'] ?? NaN;
+        siteConfiguration.application.versionName = siteConfiguration.application.versionName ?? await getTagName();
+        siteConfiguration.application.info.updatedOn = format(new Date(release['published_at']), 'MMM d, yyyy');
 
-    index = index.replace(/__SITE_TITLE__/g, `${Config.application.name} - ${Config.developer.name}`);
-    index = index.replace(/__SITE_DESCRIPTION__/g, Config.application.description);
+        index = index.replace(/__SITE_TITLE__/g, `${Config.application.name} - ${Config.developer.name}`);
+        index = index.replace(/__SITE_DESCRIPTION__/g, Config.application.description);
+    }
+
   } else if (statusCode === 404) {
     index = index.replace(/__SITE_TITLE__/g, '404 - Page Not Found');
     index = index.replace(/__SITE_DESCRIPTION__/g, '');

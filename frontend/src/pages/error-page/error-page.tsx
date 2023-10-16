@@ -6,9 +6,11 @@ interface PageNotFoundProps {
 
 function PageNotFound(props: PageNotFoundProps) {
   const greaterThan1000 = useMediaQuery('(min-width:1000px)');
+  const greaterThan850 = useMediaQuery('(min-width:850px)');
+  const greaterThan650 = useMediaQuery('(min-width:650px)');
 
   return (
-    <Box sx={{p: 15, width: greaterThan1000 ? '850px' : '100%'}}>
+    <Box sx={{p: greaterThan850 ? 15 : greaterThan650 ? 10 : 5, width: greaterThan1000 ? '850px' : '100%'}}>
       <Typography variant="h4" fontWeight="bold">
         { props.error === 404 ? "404 Page Not Found" :
           props.error === 500 ? "500 Internal Server Error" : props.error + " An Error Occurred"
