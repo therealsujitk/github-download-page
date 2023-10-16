@@ -93,7 +93,6 @@ function SideLink(props: SideLinkProps) {
     <a href={props.href} target="_blank" rel="noreferrer">
       <Button 
         sx={{
-          textTransform: 'none',
           justifyContent: 'start',
           color: 'text.primary',
         }}

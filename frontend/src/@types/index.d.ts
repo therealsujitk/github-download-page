@@ -29,6 +29,7 @@ declare global {
           name: string,
           href: string,
         }[],
+        statusCode: number,
       },
       [prop: string]: any,
     };

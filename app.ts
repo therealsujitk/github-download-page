@@ -25,7 +25,7 @@ app.get('/download', async (_: any, res: any) => {
       res.redirect(Config.application.downloadLink);
     }
   } catch (error) {
-    res.status(500).send('500 Internal Server Error');
+    res.status(500).send(await loadIndex(500));
   }
 });
 
@@ -44,7 +44,7 @@ app.get('/about.json', async (_: any, res: any) => {
 
     res.status(200).json(about);
   } catch (error) {
-    res.status(500).send('500 Internal Server Error');
+    res.status(500).send(await loadIndex(500));
   }
 });
 
@@ -53,7 +53,7 @@ app.get('/release.svg', async (_: any, res: any) => {
     res.setHeader('Content-type', 'image/svg+xml');
     res.status(200).send(await SheildsIO.createReleaseBadge(await getTagName()));
   } catch (error) {
-    res.status(500).send('500 Internal Server Error');
+    res.status(500).send(await loadIndex(500));
   }
 });
 
@@ -64,15 +64,25 @@ app.get('/downloads.svg', async (_: any, res: any) => {
     res.setHeader('Content-type', 'image/svg+xml');
     res.status(200).send(await SheildsIO.createDownloadsBadge(downloadCount));
   } catch (error) {
-    res.status(500).send('500 Internal Server Error');
+    res.status(500).send(await loadIndex(500));
   }
 });
 
 app.get('/*', async (_: any, res: any) => {
   try {
+    res.status(404).send(await loadIndex(404));
+  } catch (error) {
+    res.status(500).send(await loadIndex(500));
+  }
+});
+
+async function loadIndex(statusCode: number) {
+  let index = fs.readFileSync(__dirname + '/frontend/build/index.html').toString();
   const siteConfiguration: any = Config;
+  siteConfiguration.site.statusCode = statusCode;
+
+  if (statusCode === 200) {
     const release = await getRelease();
-    let index = fs.readFileSync(__dirname + '/frontend/build/index.html').toString();
 
     siteConfiguration.application.downloads = await GitHub.getDownloadCount();
     siteConfiguration.application.size = release['assets'][0]?.['size'] ?? NaN;
@@ -81,14 +91,22 @@ app.get('/*', async (_: any, res: any) => {
 
     index = index.replace(/__SITE_TITLE__/g, `${Config.application.name} - ${Config.developer.name}`);
     index = index.replace(/__SITE_DESCRIPTION__/g, Config.application.description);
+  } else if (statusCode === 404) {
+    index = index.replace(/__SITE_TITLE__/g, '404 - Page Not Found');
+    index = index.replace(/__SITE_DESCRIPTION__/g, '');
+  } else if (statusCode === 500) {
+    index = index.replace(/__SITE_TITLE__/g, '500 - Internal Server Error');
+    index = index.replace(/__SITE_DESCRIPTION__/g, '');
+  } else {
+    index = index.replace(/__SITE_TITLE__/g, `${statusCode} - An Error Occurred`);
+    index = index.replace(/__SITE_DESCRIPTION__/g, '');
+  }
+
   index = index.replace(/__SITE_THEME_COLOR__/g, Config.site.primaryColor);
   index = index.replace(/__SITE_CONFIGURATION__/, encodeURIComponent(JSON.stringify(siteConfiguration)));
 
-    res.status(200).send(index);
-  } catch (error) {
-    res.status(500).send('500 Internal Server Error');
+  return index;
 }
-});
 
 async function getTagName() {
   var tagName: string|null = Config.application.tagName;

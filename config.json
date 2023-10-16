@@ -7,7 +7,7 @@
     "description": "This is a download page for your GitHub project inspired by Google Play Store. As an example I have used the material components for android catalog app to showcase this site. Click the GitHub link in the navigation bar to see how to get your own copy.",
     "website": "https://github.com/material-components/material-components-android",
     "github": "material-components/material-components-android",
-    "bugs": "https://github.com/material-components/material-components-androi/issues",
+    "bugs": "https://github.com/therealsujitk/github-download-page/issues",
     "downloadLink": null,
     "info": {
       "minimumRequirement": "Android 6.0+",

@@ -186,12 +186,12 @@ function Header() {
         </Stack>
         <Box sx={{display: greaterThan600 ? 'flex' : 'block', mt: 3, gap: 2}}>
           <a href="/download">
-            <Button variant="contained" sx={{width: greaterThan600 ? '200px' : '100%', textTransform: 'none'}}>Download</Button>
+            <Button variant="contained" sx={{width: greaterThan600 ? '200px' : '100%'}}>Download</Button>
           </a>
           <Stack direction="row" spacing={2} mt={greaterThan600 ? 0 : 2}>
             {greaterThan1280 || !greaterThan600
               ? (<>
-                  <Button onClick={handleShareClick} startIcon={<Share />} sx={{textTransform: 'none'}} fullWidth={!greaterThan600}>Share</Button>
+                  <Button onClick={handleShareClick} startIcon={<Share />} fullWidth={!greaterThan600}>Share</Button>
                 </>)
               : (<>
                   <IconButton onClick={handleShareClick} color="primary"><Share /></IconButton>

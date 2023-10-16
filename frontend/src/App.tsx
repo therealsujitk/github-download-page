@@ -1,4 +1,4 @@
-import { HomePage } from './pages';
+import { HomePage, ErrorPage } from './pages';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 
 if (!window.siteConfiguration) {
@@ -38,7 +38,8 @@ if (!window.siteConfiguration) {
           name: "Donate",
           href: "https://therealsuji.tk/donate"
         }
-      ]
+      ],
+      statusCode: 200,
     }
   };
 }
@@ -80,7 +81,11 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <HomePage />
+      {
+        window.siteConfiguration.site.statusCode === 200
+        ? <HomePage /> 
+        : <ErrorPage error={window.siteConfiguration.site.statusCode} />
+      }
     </ThemeProvider>
   );
 }
