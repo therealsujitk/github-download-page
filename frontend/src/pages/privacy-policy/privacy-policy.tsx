@@ -21,7 +21,7 @@ function PrivacyPolicy() {
 
   return (
     <Box sx={{margin: 'auto', p: greaterThan850 ? 15 : greaterThan650 ? 10 : 5, width: greaterThan1000 ? '950px' : '100%'}}>
-      <Typography variant="h2">Privacy Policy</Typography>
+      <Typography variant="h3" fontWeight="bold">Privacy Policy</Typography>
       <Typography variant="body1" mt={3}>Last updated: <b>{Data.lastUpdated}</b></Typography>
       <Typography variant="body1" mt={1}>This Privacy Policy describes the policies and procedures on the collection, use and disclosure of your information when you use this service.</Typography>
       {
