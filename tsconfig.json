@@ -16,8 +16,10 @@
     "outDir": "./dist"
   },
   "include": [
-    "bin/server.ts"
+    "**/*.ts",
+    "config.json"
   ],
+  "exclude": ["frontend/*"],
   "ts-node": {
 		"transpileOnly": true,
 		"files": true,

@@ -1,9 +1,9 @@
-const got = require('got');
-const NodeCache = require('node-cache');
-const Config = require('../config.json');
+var got = require('got');
+var NodeCache = require('node-cache');
+var Config = require('../config.json');
 
-const repository = Config.application.github;
-const cache = new NodeCache({ stdTTL: 21600, checkperiod: 3600 });
+var repository = Config.application.github;
+var cache = new NodeCache({ stdTTL: 21600, checkperiod: 3600 });
 
 async function getReleases() {
   const url = new URL(`https://api.github.com/repos/${repository}/releases`);

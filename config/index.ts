@@ -1,3 +1,3 @@
-const PORT = process.env.PORT;
+var PORT: any = process.env.PORT;
 
 module.exports = { PORT };

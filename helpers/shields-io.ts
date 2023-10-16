@@ -1,7 +1,7 @@
-const got = require('got');
-const NodeCache = require('node-cache');
+var got = require('got');
+var NodeCache = require('node-cache');
 
-const cache = new NodeCache({ stdTTL: 21600, checkperiod: 3600 });
+var cache = new NodeCache({ stdTTL: 21600, checkperiod: 3600 });
 
 interface Badge {
   key: string,
