@@ -35,6 +35,25 @@ if (!window.siteConfiguration) {
       ],
       statusCode: 200,
     },
+    privacyPolicy: {
+      lastUpdated: new Date(2023, 9, 16),
+      lastUpdatedString: "October 16, 2023",
+      body: [
+        {
+          "heading": "About this service",
+          "content": [
+            "This service contains no ads whatsoever and is completely free of cost and open source. If you feel like supporting me, you can always leave a donation at [https://therealsuji.tk/donate](https://therealsuji.tk/donate)."
+          ]
+        },
+        {
+          "heading": "Contact us",
+          "content": [
+            "If you have any questions about this Privacy Policy, You can contact me:",
+            "- By email: [me@example.com](mailto:me@example.com)\n- By visiting this page on our website: [https://example.com](https://example.com)"
+          ]
+        }
+      ]
+    },
   };
 }
 

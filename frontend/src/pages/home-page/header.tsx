@@ -6,8 +6,6 @@ import facebookSocial from './assets/social/facebook.png';
 import whatsappSocial from './assets/social/whatsapp.png';
 import React, { useState } from "react";
 
-const logo = window.siteConfiguration.application.logo ?? defaultLogo;
-
 interface InfoItemProps {
   name: React.ReactNode;
   value: React.ReactNode;
@@ -46,6 +44,8 @@ interface ShareDialogProps {
 }
 
 function ShareDialog(props: ShareDialogProps) {
+  const logo = window.siteConfiguration.application.logo ?? defaultLogo;
+
   const shareX = () => {
     const url = new URL('https://twitter.com/intent/tweet');
     url.searchParams.append("url", window.location.href);
@@ -111,6 +111,8 @@ function Header() {
   const greaterThan840 = useMediaQuery('(min-width:840px)');
   const greaterThan1280 = useMediaQuery('(min-width:1280px)');
 
+  const logo = window.siteConfiguration.application.logo ?? defaultLogo;
+
   const [isShareDialogOpen, toggleShareDialog] = useState(false);
 
   const handleShareClick = () => {
@@ -166,7 +168,7 @@ function Header() {
             <img src={logo} alt="Application Logo" style={{width: '100%', borderRadius: '18px'}} />
           </Box>}
           <Box sx={{flex: 1}}>
-            <Typography variant={greaterThan1280 ? "h2" : "h4"} fontWeight="bold" mb={2}>{window.siteConfiguration.application.name}</Typography>
+            <Typography variant={greaterThan1280 ? "h2" : "h4"} fontWeight="bold" mb={greaterThan840 ? 2 : 1}>{window.siteConfiguration.application.name}</Typography>
             <Link href={window.siteConfiguration.developer.website} underline="none" fontWeight="bold">{window.siteConfiguration.developer.name}</Link>
           </Box>
         </Box>
