@@ -1,10 +1,12 @@
 import { Close, ContentCopy, Email, Share } from "@mui/icons-material";
 import { Avatar, Box, Button, Dialog, DialogContent, DialogTitle, Divider, IconButton, Link, Stack, TextField, Typography, useMediaQuery } from "@mui/material";
-import logo from './assets/logo.png';
+import defaultLogo from './assets/logo.png';
 import xSocial from './assets/social/x.jpg';
 import facebookSocial from './assets/social/facebook.png';
 import whatsappSocial from './assets/social/whatsapp.png';
 import React, { useState } from "react";
+
+const logo = window.siteConfiguration.application.logo ?? defaultLogo;
 
 interface InfoItemProps {
   name: React.ReactNode;

@@ -36,7 +36,7 @@ function HomePage() {
         <Toolbar>
           <Avatar alt={window.siteConfiguration.developer.name} src={window.siteConfiguration.developer.logo ?? developerIcon} sx={{mr: 4}} />
           <Stack direction="row" spacing={2} alignItems="center">
-            {(window.siteConfiguration.site.links).map((l, i) => <Link key={i} href={l.href} underline="hover">{l.name}</Link>)}
+            {window.siteConfiguration.site.links && window.siteConfiguration.site.links.map((l, i) => <Link key={i} href={l.href} underline="hover">{l.name}</Link>)}
           </Stack>
         </Toolbar>
       </AppBar>

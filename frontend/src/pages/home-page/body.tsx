@@ -4,9 +4,12 @@ import { createRef, useEffect, useState } from "react";
 
 function Preview() {
   const greaterThan1280 = useMediaQuery('(min-width:1280px)');
+  var screenshots = window.siteConfiguration.application.screenshots;
 
-  const screenshotContext = require.context('./assets/screenshots', false, /\.(jpe?g|png|gif|svg|webp)$/);
-  const screenshots = screenshotContext.keys().map(screenshotContext) as string[];
+  if (!screenshots) {
+    const screenshotContext = require.context('./assets/screenshots', false, /\.(jpe?g|png|gif|svg|webp)$/);
+    screenshots = screenshotContext.keys().map(screenshotContext) as string[];
+  }
 
   const containerRef : React.RefObject<HTMLUListElement> = createRef();
 

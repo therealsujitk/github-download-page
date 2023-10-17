@@ -5,6 +5,8 @@ declare interface SiteConfiguration {
     name: string,
     tagName?: string,
     description: string,
+    logo?: string,
+    screenshots?: string[],
     downloadLink?: string,
     website?: string,
     github: `${string}/${string}`,
@@ -23,7 +25,7 @@ declare interface SiteConfiguration {
   }
   site: {
     primaryColor: `#${string}`,
-    links: {
+    links?: {
       name: string,
       href: string,
     }[],
