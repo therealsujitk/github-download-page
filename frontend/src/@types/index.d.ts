@@ -13,6 +13,14 @@ export interface ExtendedSiteConfiguration extends SiteConfiguration {
   site: SiteConfiguration['site'] & {
     statusCode: number,
   },
+  privacyPolicy?: string | {
+    lastUpdated: Date,
+    lastUpdatedString: string,
+    body: {
+      heading: string,
+      content: string[],
+    }[],
+  },
 }
 
 declare global {

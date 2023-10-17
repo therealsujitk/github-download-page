@@ -1,6 +1,6 @@
 import { Box, Link, Typography, useMediaQuery } from '@mui/material';
-import Data from './data.json';
 import Markdown, { Components } from 'react-markdown';
+import { ErrorPage } from '..';
 
 function PrivacyPolicy() {
   const greaterThan1000 = useMediaQuery('(min-width:1000px)');
@@ -19,13 +19,17 @@ function PrivacyPolicy() {
     text: ({children}) => <Typography variant="body1" mt={1}>{children}</Typography>,
   };
 
+  if (!window.siteConfiguration.privacyPolicy || typeof window.siteConfiguration.privacyPolicy === 'string') {
+    return <ErrorPage error={500} />;
+  }
+
   return (
     <Box sx={{margin: 'auto', p: greaterThan850 ? 15 : greaterThan650 ? 10 : 5, width: greaterThan1000 ? '950px' : '100%'}}>
       <Typography variant="h3" fontWeight="bold">Privacy Policy</Typography>
-      <Typography variant="body1" mt={3}>Last updated: <b>{Data.lastUpdated}</b></Typography>
+      <Typography variant="body1" mt={3}>Last updated: <b>{window.siteConfiguration.privacyPolicy.lastUpdatedString}</b></Typography>
       <Typography variant="body1" mt={1}>This Privacy Policy describes the policies and procedures on the collection, use and disclosure of your information when you use this service.</Typography>
       {
-        Data.body.map((el, i) => (
+        window.siteConfiguration.privacyPolicy.body.map((el, i) => (
           <Box key={i}>
             <Typography variant="h4" mt={3}>{el.heading}</Typography>
             {el.content.map((c, i) => <Markdown key={i} components={mdComponents}>{c}</Markdown>)}

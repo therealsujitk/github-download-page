@@ -39,7 +39,25 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
           href: "https://therealsuji.tk/donate"
         }
       ],
-    }
+    },
+    privacyPolicy: {
+      lastUpdated: new Date(2023, 9, 16),
+      body: [
+        {
+          "heading": "About this service",
+          "content": [
+            "This service contains no ads whatsoever and is completely free of cost and open source. If you feel like supporting me, you can always leave a donation at [https://therealsuji.tk/donate](https://therealsuji.tk/donate)."
+          ]
+        },
+        {
+          "heading": "Contact us",
+          "content": [
+            "If you have any questions about this Privacy Policy, You can contact me:",
+            "- By email: [me@example.com](mailto:me@example.com)\n- By visiting this page on our website: [https://example.com](https://example.com)"
+          ]
+        }
+      ]
+    },
   };
 
   const getTagName = async () => {
@@ -75,6 +93,14 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
         ...siteConfiguration.site,
         statusCode: statusCode,
       },
+      privacyPolicy: !siteConfiguration.privacyPolicy 
+        ? undefined 
+        : typeof siteConfiguration.privacyPolicy === 'string' 
+          ? siteConfiguration.privacyPolicy 
+          : {
+            ...siteConfiguration.privacyPolicy,
+            lastUpdatedString: format(siteConfiguration.privacyPolicy.lastUpdated, 'MMMM d, yyyy'),
+          },
     }
   
     if (statusCode === 200) {
@@ -126,7 +152,13 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
   
   router.get('/privacy-policy', async (_, res) => {
     try {
-      res.status(200).send(await loadIndex(200, '/privacy-policy'));
+      if (!siteConfiguration.privacyPolicy) {
+        res.status(404).send(await loadIndex(404));
+      } else if (typeof siteConfiguration.privacyPolicy === 'string') {
+        res.status(200).redirect(siteConfiguration.privacyPolicy);
+      } else {
+        res.status(200).send(await loadIndex(200, '/privacy-policy'));
+      }
     } catch (error) {
       res.status(500).send(await loadIndex(500));
     }

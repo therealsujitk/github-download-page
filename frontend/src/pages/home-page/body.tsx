@@ -151,9 +151,9 @@ function Body() {
         </Box>
         {isAppSupportOpen && <Stack spacing={1} mt={1}>
           <SideLink startIcon={<Public />} href={window.siteConfiguration.application.website ?? getGitHub()}>Website</SideLink>
-          <SideLink startIcon={<GitHub />} href={`https://github.com/${window.siteConfiguration.application.github}`}>GitHub Repository</SideLink>
+          <SideLink startIcon={<GitHub />} href={getGitHub()}>GitHub Repository</SideLink>
           <SideLink startIcon={<BugReport />} href={window.siteConfiguration.application.bugs ?? `${getGitHub()}/issues`}>Report a Bug</SideLink>
-          <SideLink startIcon={<ShieldOutlined />} href={window.siteConfiguration.application.privacyPolicy ?? `${process.env.PUBLIC_URL}/privacy-policy`}>Privacy Policy</SideLink>
+          {window.siteConfiguration.privacyPolicy && <SideLink startIcon={<ShieldOutlined />} href={`${process.env.PUBLIC_URL}/privacy-policy`}>Privacy Policy</SideLink>}
         </Stack>}
         <Typography variant="h5" mt={5}>App info</Typography>
         <Stack>

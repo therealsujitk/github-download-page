@@ -11,7 +11,6 @@ declare interface SiteConfiguration {
     website?: string,
     github: `${string}/${string}`,
     bugs?: string,
-    privacyPolicy?: string,
     info: {
       minimumRequirement?: string,
       releasedOn: Date,
@@ -28,6 +27,13 @@ declare interface SiteConfiguration {
     links?: {
       name: string,
       href: string,
+    }[],
+  },
+  privacyPolicy?: string | {
+    lastUpdated: Date,
+    body: {
+      heading: string,
+      content: string[],
     }[],
   },
 }

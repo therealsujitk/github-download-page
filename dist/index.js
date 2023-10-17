@@ -74,7 +74,25 @@ const downloadPageRouter = (options) => {
                     href: "https://therealsuji.tk/donate"
                 }
             ],
-        }
+        },
+        privacyPolicy: {
+            lastUpdated: new Date(2023, 9, 16),
+            body: [
+                {
+                    "heading": "About this service",
+                    "content": [
+                        "This service contains no ads whatsoever and is completely free of cost and open source. If you feel like supporting me, you can always leave a donation at [https://therealsuji.tk/donate](https://therealsuji.tk/donate)."
+                    ]
+                },
+                {
+                    "heading": "Contact us",
+                    "content": [
+                        "If you have any questions about this Privacy Policy, You can contact me:",
+                        "- By email: [me@example.com](mailto:me@example.com)\n- By visiting this page on our website: [https://example.com](https://example.com)"
+                    ]
+                }
+            ]
+        },
     };
     const getTagName = () => __awaiter(void 0, void 0, void 0, function* () {
         if (siteConfiguration.application.tagName) {
@@ -93,7 +111,11 @@ const downloadPageRouter = (options) => {
     const loadIndex = (statusCode, route = undefined) => __awaiter(void 0, void 0, void 0, function* () {
         var _a, _b, _c;
         let index = fs_1.default.readFileSync(__dirname + '/frontend/build/index.html').toString();
-        const extendedSiteConfiguration = Object.assign(Object.assign({}, siteConfiguration), { application: Object.assign(Object.assign({}, siteConfiguration.application), { info: Object.assign(Object.assign({}, siteConfiguration.application.info), { releasedOnString: (0, date_fns_1.format)(siteConfiguration.application.info.releasedOn, 'MMM d, yyyy') }) }), site: Object.assign(Object.assign({}, siteConfiguration.site), { statusCode: statusCode }) });
+        const extendedSiteConfiguration = Object.assign(Object.assign({}, siteConfiguration), { application: Object.assign(Object.assign({}, siteConfiguration.application), { info: Object.assign(Object.assign({}, siteConfiguration.application.info), { releasedOnString: (0, date_fns_1.format)(siteConfiguration.application.info.releasedOn, 'MMM d, yyyy') }) }), site: Object.assign(Object.assign({}, siteConfiguration.site), { statusCode: statusCode }), privacyPolicy: !siteConfiguration.privacyPolicy
+                ? undefined
+                : typeof siteConfiguration.privacyPolicy === 'string'
+                    ? siteConfiguration.privacyPolicy
+                    : Object.assign(Object.assign({}, siteConfiguration.privacyPolicy), { lastUpdatedString: (0, date_fns_1.format)(siteConfiguration.privacyPolicy.lastUpdated, 'MMMM d, yyyy') }) });
         if (statusCode === 200) {
             switch (route) {
                 case '/privacy-policy':
@@ -139,7 +161,15 @@ const downloadPageRouter = (options) => {
     }));
     router.get('/privacy-policy', (_, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            res.status(200).send(yield loadIndex(200, '/privacy-policy'));
+            if (!siteConfiguration.privacyPolicy) {
+                res.status(404).send(yield loadIndex(404));
+            }
+            else if (typeof siteConfiguration.privacyPolicy === 'string') {
+                res.status(200).redirect(siteConfiguration.privacyPolicy);
+            }
+            else {
+                res.status(200).send(yield loadIndex(200, '/privacy-policy'));
+            }
         }
         catch (error) {
             res.status(500).send(yield loadIndex(500));
