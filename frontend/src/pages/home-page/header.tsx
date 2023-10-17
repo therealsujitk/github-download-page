@@ -180,9 +180,9 @@ function Header() {
           } 
           spacing={3}
         >
-          <InfoItem name="Downloads" value={formatNumber(window.siteConfiguration.application.downloads)} />
-          <InfoItem name="Version" value={window.siteConfiguration.application.versionName} />
-          <InfoItem name="Download Size" value={formatSize(window.siteConfiguration.application.size)} />
+          <InfoItem name="Downloads" value={formatNumber(window.siteConfiguration.application.downloads ?? 0)} />
+          <InfoItem name="Version" value={window.siteConfiguration.application.tagName ?? 'Unknown'} />
+          <InfoItem name="Download Size" value={formatSize(window.siteConfiguration.application.size ?? NaN)} />
         </Stack>
         <Box sx={{display: greaterThan600 ? 'flex' : 'block', mt: 3, gap: 2}}>
           <a href="/download">

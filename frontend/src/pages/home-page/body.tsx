@@ -126,6 +126,8 @@ function Body() {
 
   const [isAppSupportOpen, toggleAppSupport] = useState(false);
 
+  const getGitHub = () => `https://github.com/${window.siteConfiguration.application.github}`
+
   return (
     <Box sx={{
       mt: greaterThan600 ? 8 : 4,
@@ -145,16 +147,16 @@ function Body() {
           </IconButton>
         </Box>
         {isAppSupportOpen && <Stack spacing={1} mt={1}>
-          <SideLink startIcon={<Public />} href={window.siteConfiguration.application.website}>Website</SideLink>
+          <SideLink startIcon={<Public />} href={window.siteConfiguration.application.website ?? getGitHub()}>Website</SideLink>
           <SideLink startIcon={<GitHub />} href={`https://github.com/${window.siteConfiguration.application.github}`}>GitHub Repository</SideLink>
-          <SideLink startIcon={<BugReport />} href={window.siteConfiguration.application.bugs}>Report a Bug</SideLink>
-          <SideLink startIcon={<ShieldOutlined />} href="/privacy-policy">Privacy Policy</SideLink>
+          <SideLink startIcon={<BugReport />} href={window.siteConfiguration.application.bugs ?? `${getGitHub()}/issues`}>Report a Bug</SideLink>
+          <SideLink startIcon={<ShieldOutlined />} href={window.siteConfiguration.application.privacyPolicy ?? `${process.env.PUBLIC_URL}/privacy-policy`}>Privacy Policy</SideLink>
         </Stack>}
         <Typography variant="h5" mt={5}>App info</Typography>
         <Stack>
           <SideItem name="Requires" value={window.siteConfiguration.application.info.minimumRequirement ?? 'No requirements'} />
-          <SideItem name="Updated on" value={window.siteConfiguration.application.info.updatedOn} />
-          <SideItem name="Released on" value={window.siteConfiguration.application.info.releasedOn} />
+          <SideItem name="Updated on" value={window.siteConfiguration.application.info.updatedOnString ?? 'Unknown'} />
+          <SideItem name="Released on" value={window.siteConfiguration.application.info.releasedOnString ?? 'Unknown'} />
         </Stack>
       </Box>
     </Box>

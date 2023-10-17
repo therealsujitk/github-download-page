@@ -1,0 +1,9 @@
+*
+
+!package.json
+!frontend/package.json
+!dist/**/*
+!index.d.ts
+
+dist/bin
+dist/config

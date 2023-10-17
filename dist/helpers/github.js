@@ -14,10 +14,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const got_1 = __importDefault(require("got"));
 const node_cache_1 = __importDefault(require("node-cache"));
-const config_json_1 = __importDefault(require("../config.json"));
-const repository = config_json_1.default.application.github;
 const cache = new node_cache_1.default({ stdTTL: 21600, checkperiod: 3600 });
-function getReleases() {
+function getReleases(repository) {
     return __awaiter(this, void 0, void 0, function* () {
         const url = new URL(`https://api.github.com/repos/${repository}/releases`);
         if (cache.has(url.toString())) {
@@ -28,7 +26,7 @@ function getReleases() {
         return response;
     });
 }
-function getLatestRelease() {
+function getLatestRelease(repository) {
     return __awaiter(this, void 0, void 0, function* () {
         const url = new URL(`https://api.github.com/repos/${repository}/releases/latest`);
         if (cache.has(url.toString())) {
@@ -39,7 +37,7 @@ function getLatestRelease() {
         return response;
     });
 }
-function getReleaseByTag(tag) {
+function getReleaseByTag(repository, tag) {
     return __awaiter(this, void 0, void 0, function* () {
         const url = new URL(`https://api.github.com/repos/${repository}/releases/tags/${tag}`);
         if (cache.has(url.toString())) {
@@ -50,9 +48,9 @@ function getReleaseByTag(tag) {
         return response;
     });
 }
-function getDownloadCount() {
+function getDownloadCount(repository) {
     return __awaiter(this, void 0, void 0, function* () {
-        const releases = yield getReleases();
+        const releases = yield getReleases(repository);
         let downloadCount = 0;
         for (let i = 0; i < releases.length; ++i) {
             for (let j = 0; j < releases[i]['assets'].length; ++j) {

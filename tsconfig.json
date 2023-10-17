@@ -1,7 +1,10 @@
 {
   "compilerOptions": {
     "target": "ES6",
-    "typeRoots": ["node_modules/@types"],
+    "types": [
+      "./index.d.ts",
+      "./frontend/src/@types"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -9,11 +12,11 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "module": "CommonJS",
-    "moduleResolution": "node",
+    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "removeComments": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
   },
   "include": [
     "**/*.ts",
