@@ -1,9 +1,9 @@
-var got = require('got');
-var NodeCache = require('node-cache');
-var Config = require('../config.json');
+import got from 'got';
+import NodeCache from 'node-cache';
+import Config from '../config.json';
 
-var repository = Config.application.github;
-var cache = new NodeCache({ stdTTL: 21600, checkperiod: 3600 });
+const repository = Config.application.github;
+const cache = new NodeCache({ stdTTL: 21600, checkperiod: 3600 });
 
 async function getReleases() {
   const url = new URL(`https://api.github.com/repos/${repository}/releases`);
@@ -54,7 +54,7 @@ async function getDownloadCount() {
   return downloadCount;
 }
 
-module.exports = {
+export default {
   getReleases,
   getLatestRelease,
   getReleaseByTag,

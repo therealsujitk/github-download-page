@@ -1,9 +1,9 @@
-var app = require('../app.js');
-var { PORT } = require('../config/index.js');
-var http = require('http');
+import app from '../app';
+import { PORT } from '../config';
+import http from 'http';
 
-var httpServer = http.createServer(app);
-var port = PORT || 3000;
+const httpServer = http.createServer(app);
+const port = PORT || 3000;
 
 /*
   Starting the listener

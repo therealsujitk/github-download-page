@@ -1,14 +1,15 @@
-var express = require('express');
-var fs = require('fs');
-var path = require('path');
-var SheildsIO = require('./helpers/shields-io.js');
-var GitHub = require('./helpers/github.js');
-var Config = require('./config.json');
-var { format } = require('date-fns');
-var app = express();
+import express from 'express';
+import fs from 'fs';
+import path from 'path';
+import SheildsIO from './helpers/shields-io';
+import GitHub from './helpers/github';
+import Config from './config.json';
+import { format } from 'date-fns';
+
+const app = express();
 
 app.use(express.static(path.join(__dirname, '/frontend/build'), { index: false }));
-app.get('/', async (_: any, res: any) => {
+app.get('/', async (_, res) => {
   try {
     res.status(200).send(await loadIndex(200, '/'));
   } catch (error) {
@@ -16,7 +17,7 @@ app.get('/', async (_: any, res: any) => {
   }
 });
 
-app.get('/privacy-policy', async (_: any, res: any) => {
+app.get('/privacy-policy', async (_, res) => {
   try {
     res.status(200).send(await loadIndex(200, '/privacy-policy'));
   } catch (error) {
@@ -24,7 +25,7 @@ app.get('/privacy-policy', async (_: any, res: any) => {
   }
 });
 
-app.get('/download', async (_: any, res: any) => {
+app.get('/download', async (_, res) => {
   try {
     if (Config.application.downloadLink === null) {
       const release = await getRelease();
@@ -37,7 +38,7 @@ app.get('/download', async (_: any, res: any) => {
   }
 });
 
-app.get('/about.json', async (_: any, res: any) => {
+app.get('/about.json', async (_, res) => {
   try {
     const tagName = await getTagName();
     const release = await getRelease();
@@ -56,7 +57,7 @@ app.get('/about.json', async (_: any, res: any) => {
   }
 });
 
-app.get('/release.svg', async (_: any, res: any) => {
+app.get('/release.svg', async (_, res) => {
   try {
     res.setHeader('Content-type', 'image/svg+xml');
     res.status(200).send(await SheildsIO.createReleaseBadge(await getTagName()));
@@ -65,7 +66,7 @@ app.get('/release.svg', async (_: any, res: any) => {
   }
 });
 
-app.get('/downloads.svg', async (_: any, res: any) => {
+app.get('/downloads.svg', async (_, res) => {
 
   try {
     const downloadCount = await GitHub.getDownloadCount();
@@ -76,7 +77,7 @@ app.get('/downloads.svg', async (_: any, res: any) => {
   }
 });
 
-app.get('/*', async (_: any, res: any) => {
+app.get('/*', async (_, res) => {
   try {
     res.status(404).send(await loadIndex(404));
   } catch (error) {
@@ -86,7 +87,7 @@ app.get('/*', async (_: any, res: any) => {
 
 async function loadIndex(statusCode: number, route: string|undefined = undefined) {
   let index = fs.readFileSync(__dirname + '/frontend/build/index.html').toString();
-  const siteConfiguration: any = Config;
+  const siteConfiguration: {[x: string]: any} = Config;
   siteConfiguration.site.statusCode = statusCode;
 
   if (statusCode === 200) {
@@ -139,4 +140,4 @@ async function getRelease() {
   return await GitHub.getReleaseByTag(tagName);
 }
 
-module.exports = app;
+export default app;

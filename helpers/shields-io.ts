@@ -1,7 +1,7 @@
-var got = require('got');
-var NodeCache = require('node-cache');
+import got from 'got';
+import NodeCache from 'node-cache';
 
-var cache = new NodeCache({ stdTTL: 21600, checkperiod: 3600 });
+const cache = new NodeCache({ stdTTL: 21600, checkperiod: 3600 });
 
 interface Badge {
   key: string,
@@ -54,7 +54,7 @@ function createDownloadsBadge(downloads: number) {
   return createBadge(badge);
 }
 
-module.exports = {
+export default {
   createBadge,
   createDownloadsBadge,
   createReleaseBadge,

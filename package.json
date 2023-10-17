@@ -2,17 +2,14 @@
   "name": "github-download-page",
   "version": "1.0.0",
   "description": "A beautiful download page for your GitHub project.",
-  "private": true,
   "exports": "./bin/server.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "cd frontend && npm i",
+    "dev": "ts-node-esm -r dotenv/config -r tsconfig-paths/register bin/server.ts",
     "build": "npm run build:frontend && rm -rf dist && tsc -p .",
     "build:frontend": "cd frontend && npm run build",
     "postbuild": "mkdir dist/frontend && cp -r frontend/build dist/frontend/build",
-    "dev": "ts-node-esm -r dotenv/config -r tsconfig-paths/register bin/server.ts",
-    "start": "node dist/bin/server.js",
-    "preinstall": "cd frontend && npm i",
-    "vercel-build": "npm run build"
+    "start": "node dist/bin/server.js"
   },
   "repository": {
     "type": "git",
@@ -40,7 +37,11 @@
   },
   "devDependencies": {
     "dotenv": "^16.3.1",
+    "pre-commit": "^1.2.2",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.2.0"
-  }
+  },
+  "pre-commit": [
+    "build"
+  ]
 }
