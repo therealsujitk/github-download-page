@@ -13,7 +13,7 @@ This package gives you an [express router](https://expressjs.com/en/5x/api.html#
 After this you can install this package using the following command.
 
 ```sh
-$ npm i therealsujitk/github-download-page
+$ npm i therealsujitk/github-download-page#1.0.0
 ```
 
 ### Example
