@@ -153,7 +153,9 @@ function Body() {
           <SideLink startIcon={<Public />} href={window.siteConfiguration.application.website ?? getGitHub()}>Website</SideLink>
           <SideLink startIcon={<GitHub />} href={getGitHub()}>GitHub Repository</SideLink>
           <SideLink startIcon={<BugReport />} href={window.siteConfiguration.application.bugs ?? `${getGitHub()}/issues`}>Report a Bug</SideLink>
-          {window.siteConfiguration.privacyPolicy && <SideLink startIcon={<ShieldOutlined />} href={`${process.env.PUBLIC_URL}/privacy-policy`}>Privacy Policy</SideLink>}
+          {window.siteConfiguration.privacyPolicy && 
+            <SideLink startIcon={<ShieldOutlined />} href={`${process.env.PUBLIC_URL}${window.siteConfiguration.site.basePath ?? ''}/privacy-policy`}>Privacy Policy</SideLink>
+          }
         </Stack>}
         <Typography variant="h5" mt={5}>App info</Typography>
         <Stack>

@@ -60,6 +60,14 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
     },
   };
 
+  var basePath: string = siteConfiguration.site.basePath ?? '';
+
+  if (!siteConfiguration.site.basePath) {
+    siteConfiguration.site.basePath = '/';
+  } else if (siteConfiguration.site.basePath.endsWith('/')) {
+    basePath = basePath.slice(0, -1);
+  }
+
   const getTagName = async () => {
     if (siteConfiguration.application.tagName) {
       return siteConfiguration.application.tagName;
@@ -142,7 +150,7 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
   }
 
   router.use(express.static(path.join(__dirname, '/frontend/build'), { index: false }));
-  router.get('/', async (_, res) => {
+  router.get(`${basePath}/`, async (_, res) => {
     try {
       res.status(200).send(await loadIndex(200, '/'));
     } catch (error) {
@@ -150,7 +158,7 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
     }
   });
   
-  router.get('/privacy-policy', async (_, res) => {
+  router.get(`${basePath}/privacy-policy`, async (_, res) => {
     try {
       if (!siteConfiguration.privacyPolicy) {
         res.status(404).send(await loadIndex(404));
@@ -164,7 +172,7 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
     }
   });
   
-  router.get('/download', async (_, res) => {
+  router.get(`${basePath}/download`, async (_, res) => {
     try {
       if (!siteConfiguration.application.downloadLink) {
         const release = await getRelease();
@@ -177,7 +185,7 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
     }
   });
   
-  router.get('/about.json', async (_, res) => {
+  router.get(`${basePath}/about.json`, async (_, res) => {
     try {
       const tagName = await getTagName();
       const release = await getRelease();
@@ -196,7 +204,7 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
     }
   });
   
-  router.get('/release.svg', async (_, res) => {
+  router.get(`${basePath}/release.svg`, async (_, res) => {
     try {
       res.setHeader('Content-type', 'image/svg+xml');
       res.status(200).send(await SheildsIO.createReleaseBadge(await getTagName()));
@@ -205,7 +213,7 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
     }
   });
   
-  router.get('/downloads.svg', async (_, res) => {
+  router.get(`${basePath}/downloads.svg`, async (_, res) => {
     try {
       const downloadCount = await GitHub.getDownloadCount(siteConfiguration.application.github);
       res.setHeader('Content-type', 'image/svg+xml');
@@ -215,7 +223,7 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
     }
   });
   
-  router.get('/*', async (_, res) => {
+  router.get(`${basePath}/*`, async (_, res) => {
     try {
       res.status(404).send(await loadIndex(404));
     } catch (error) {

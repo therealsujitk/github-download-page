@@ -22,7 +22,7 @@ function PageNotFound(props: PageNotFoundProps) {
         }
       </Typography>
       <Box sx={{display: 'flex', justifyContent: 'space-between'}}>
-        <Link href={process.env.PUBLIC_URL + '/'} underline="none">{'< Go Home'}</Link>
+        <Link href={`${process.env.PUBLIC_URL}${window.siteConfiguration.site.basePath ?? '/'}`} underline="none">{'< Go Home'}</Link>
         <Link href={window.siteConfiguration.application.bugs ?? `https://github.com/${window.siteConfiguration.application.github}/issues`} underline="none">{'Report a Bug >'}</Link>
       </Box>
     </Box>

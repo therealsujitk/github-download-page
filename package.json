@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "preinstall": "cd frontend && npm i",
-    "dev": "ts-node-esm -r dotenv/config -r tsconfig-paths/register bin/server.ts",
+    "dev": "ts-node -r dotenv/config bin/server.ts",
     "build": "npm run build:frontend && rm -rf dist && tsc -p .",
     "build:frontend": "cd frontend && npm run build",
     "postbuild": "mkdir dist/frontend && cp -r frontend/build dist/frontend/build",
@@ -40,7 +40,6 @@
     "dotenv": "^16.3.1",
     "pre-commit": "^1.2.2",
     "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.2.2"
   },
   "pre-commit": [

@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { HomePage, ErrorPage, PrivacyPolicy } from './pages';
 import { CssBaseline, ThemeProvider, createTheme } from '@mui/material';
 
@@ -91,27 +91,19 @@ const theme = createTheme({
 });
 
 function App() {
-  const router = createBrowserRouter([
-    {
-      path: '/',
-      element: <HomePage />,
-    },
-    {
-      path: '/privacy-policy',
-      element: <PrivacyPolicy />,
-    },
-    {
-      path: '/*',
-      element: <ErrorPage error={404} />,
-    }
-  ]);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       {
         window.siteConfiguration.site.statusCode === 200
-        ? <RouterProvider router={router} />
+        ? <BrowserRouter basename={window.siteConfiguration.site.basePath}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/*" element={<ErrorPage error={404} />} />
+            </Routes>
+          </BrowserRouter>
         : <ErrorPage error={window.siteConfiguration.site.statusCode ?? 500} />
       }
     </ThemeProvider>
