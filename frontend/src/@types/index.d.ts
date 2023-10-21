@@ -12,6 +12,7 @@ export interface ExtendedSiteConfiguration extends SiteConfiguration {
   },
   site: SiteConfiguration['site'] & {
     statusCode: number,
+    basePath: string,
   },
   privacyPolicy?: string | {
     lastUpdated: Date,

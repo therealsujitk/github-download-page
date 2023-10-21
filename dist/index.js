@@ -43,7 +43,6 @@ const shields_io_1 = __importDefault(require("./helpers/shields-io"));
 const github_1 = __importDefault(require("./helpers/github"));
 const date_fns_1 = require("date-fns");
 const downloadPageRouter = (options) => {
-    var _a;
     const router = (0, express_1.Router)();
     const siteConfiguration = options !== null && options !== void 0 ? options : {
         application: {
@@ -95,13 +94,6 @@ const downloadPageRouter = (options) => {
             ]
         },
     };
-    var basePath = (_a = siteConfiguration.site.basePath) !== null && _a !== void 0 ? _a : '';
-    if (!siteConfiguration.site.basePath) {
-        siteConfiguration.site.basePath = '/';
-    }
-    else if (siteConfiguration.site.basePath.endsWith('/')) {
-        basePath = basePath.slice(0, -1);
-    }
     const getTagName = () => __awaiter(void 0, void 0, void 0, function* () {
         if (siteConfiguration.application.tagName) {
             return siteConfiguration.application.tagName;
@@ -116,10 +108,10 @@ const downloadPageRouter = (options) => {
         const tagName = yield getTagName();
         return yield github_1.default.getReleaseByTag(siteConfiguration.application.github, tagName);
     });
-    const loadIndex = (statusCode, route = undefined) => __awaiter(void 0, void 0, void 0, function* () {
-        var _b, _c, _d;
+    const loadIndex = (req, statusCode, route = undefined) => __awaiter(void 0, void 0, void 0, function* () {
+        var _a, _b, _c;
         let index = fs_1.default.readFileSync(__dirname + '/frontend/build/index.html').toString();
-        const extendedSiteConfiguration = Object.assign(Object.assign({}, siteConfiguration), { application: Object.assign(Object.assign({}, siteConfiguration.application), { info: Object.assign(Object.assign({}, siteConfiguration.application.info), { releasedOnString: (0, date_fns_1.format)(siteConfiguration.application.info.releasedOn, 'MMM d, yyyy') }) }), site: Object.assign(Object.assign({}, siteConfiguration.site), { statusCode: statusCode }), privacyPolicy: !siteConfiguration.privacyPolicy
+        const extendedSiteConfiguration = Object.assign(Object.assign({}, siteConfiguration), { application: Object.assign(Object.assign({}, siteConfiguration.application), { info: Object.assign(Object.assign({}, siteConfiguration.application.info), { releasedOnString: (0, date_fns_1.format)(siteConfiguration.application.info.releasedOn, 'MMM d, yyyy') }) }), site: Object.assign(Object.assign({}, siteConfiguration.site), { basePath: req.baseUrl, statusCode: statusCode }), privacyPolicy: !siteConfiguration.privacyPolicy
                 ? undefined
                 : typeof siteConfiguration.privacyPolicy === 'string'
                     ? siteConfiguration.privacyPolicy
@@ -131,11 +123,11 @@ const downloadPageRouter = (options) => {
                     index = index.replace(/__SITE_DESCRIPTION__/g, '');
                 default:
                     const release = yield getRelease();
-                    if ((_b = release['assets'][0]) === null || _b === void 0 ? void 0 : _b['size']) {
-                        extendedSiteConfiguration.application.size = (_c = release['assets'][0]) === null || _c === void 0 ? void 0 : _c['size'];
+                    if ((_a = release['assets'][0]) === null || _a === void 0 ? void 0 : _a['size']) {
+                        extendedSiteConfiguration.application.size = (_b = release['assets'][0]) === null || _b === void 0 ? void 0 : _b['size'];
                     }
                     extendedSiteConfiguration.application.downloads = yield github_1.default.getDownloadCount(siteConfiguration.application.github);
-                    extendedSiteConfiguration.application.tagName = (_d = siteConfiguration.application.tagName) !== null && _d !== void 0 ? _d : yield getTagName();
+                    extendedSiteConfiguration.application.tagName = (_c = siteConfiguration.application.tagName) !== null && _c !== void 0 ? _c : yield getTagName();
                     extendedSiteConfiguration.application.info.releasedOnString = (0, date_fns_1.format)(siteConfiguration.application.info.releasedOn, 'MMM d, yyyy'),
                         extendedSiteConfiguration.application.info.updatedOnString = (0, date_fns_1.format)(new Date(release['published_at']), 'MMM d, yyyy');
                     index = index.replace(/__SITE_TITLE__/g, `${siteConfiguration.application.name} - ${siteConfiguration.developer.name}`);
@@ -158,32 +150,32 @@ const downloadPageRouter = (options) => {
         index = index.replace(/__SITE_CONFIGURATION__/, encodeURIComponent(JSON.stringify(extendedSiteConfiguration)));
         return index;
     });
-    router.use(express_1.default.static(path_1.default.join(__dirname, '/frontend/build'), { index: false }));
-    router.get(`${basePath}/`, (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+    router.use('/', express_1.default.static(path_1.default.join(__dirname, '/frontend/build'), { index: false }));
+    router.get('/', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            res.status(200).send(yield loadIndex(200, '/'));
+            res.status(200).send(yield loadIndex(req, 200, '/'));
         }
         catch (error) {
-            res.status(500).send(yield loadIndex(500));
+            res.status(500).send(yield loadIndex(req, 500));
         }
     }));
-    router.get(`${basePath}/privacy-policy`, (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+    router.get('/privacy-policy', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             if (!siteConfiguration.privacyPolicy) {
-                res.status(404).send(yield loadIndex(404));
+                res.status(404).send(yield loadIndex(req, 404));
             }
             else if (typeof siteConfiguration.privacyPolicy === 'string') {
                 res.status(200).redirect(siteConfiguration.privacyPolicy);
             }
             else {
-                res.status(200).send(yield loadIndex(200, '/privacy-policy'));
+                res.status(200).send(yield loadIndex(req, 200, '/privacy-policy'));
             }
         }
         catch (error) {
-            res.status(500).send(yield loadIndex(500));
+            res.status(500).send(yield loadIndex(req, 500));
         }
     }));
-    router.get(`${basePath}/download`, (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+    router.get('/download', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             if (!siteConfiguration.application.downloadLink) {
                 const release = yield getRelease();
@@ -194,10 +186,10 @@ const downloadPageRouter = (options) => {
             }
         }
         catch (error) {
-            res.status(500).send(yield loadIndex(500));
+            res.status(500).send(yield loadIndex(req, 500));
         }
     }));
-    router.get(`${basePath}/about.json`, (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+    router.get('/about.json', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const tagName = yield getTagName();
             const release = yield getRelease();
@@ -205,34 +197,34 @@ const downloadPageRouter = (options) => {
             res.status(200).json(about);
         }
         catch (error) {
-            res.status(500).send(yield loadIndex(500));
+            res.status(500).send(yield loadIndex(req, 500));
         }
     }));
-    router.get(`${basePath}/release.svg`, (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+    router.get('/release.svg', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             res.setHeader('Content-type', 'image/svg+xml');
             res.status(200).send(yield shields_io_1.default.createReleaseBadge(yield getTagName()));
         }
         catch (error) {
-            res.status(500).send(yield loadIndex(500));
+            res.status(500).send(yield loadIndex(req, 500));
         }
     }));
-    router.get(`${basePath}/downloads.svg`, (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+    router.get('/downloads.svg', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const downloadCount = yield github_1.default.getDownloadCount(siteConfiguration.application.github);
             res.setHeader('Content-type', 'image/svg+xml');
             res.status(200).send(yield shields_io_1.default.createDownloadsBadge(downloadCount));
         }
         catch (error) {
-            res.status(500).send(yield loadIndex(500));
+            res.status(500).send(yield loadIndex(req, 500));
         }
     }));
-    router.get(`${basePath}/*`, (_, res) => __awaiter(void 0, void 0, void 0, function* () {
+    router.get('/*', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         try {
-            res.status(404).send(yield loadIndex(404));
+            res.status(404).send(yield loadIndex(req, 404));
         }
         catch (error) {
-            res.status(500).send(yield loadIndex(500));
+            res.status(500).send(yield loadIndex(req, 500));
         }
     }));
     return router;

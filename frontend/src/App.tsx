@@ -34,6 +34,7 @@ if (!window.siteConfiguration) {
         }
       ],
       statusCode: 200,
+      basePath: '/',
     },
     privacyPolicy: {
       lastUpdated: new Date(2023, 9, 16),

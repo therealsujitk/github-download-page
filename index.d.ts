@@ -28,7 +28,6 @@ declare interface SiteConfiguration {
       name: string,
       href: string,
     }[],
-    basePath?: `/${string}`,
   },
   privacyPolicy?: string | {
     lastUpdated: Date,

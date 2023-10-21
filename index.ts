@@ -1,4 +1,4 @@
-import express, { Router } from 'express';
+import express, { Request, Router } from 'express';
 import fs from 'fs';
 import path from 'path';
 import SheildsIO from './helpers/shields-io';
@@ -60,14 +60,6 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
     },
   };
 
-  var basePath: string = siteConfiguration.site.basePath ?? '';
-
-  if (!siteConfiguration.site.basePath) {
-    siteConfiguration.site.basePath = '/';
-  } else if (siteConfiguration.site.basePath.endsWith('/')) {
-    basePath = basePath.slice(0, -1);
-  }
-
   const getTagName = async () => {
     if (siteConfiguration.application.tagName) {
       return siteConfiguration.application.tagName;
@@ -86,7 +78,7 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
     return await GitHub.getReleaseByTag(siteConfiguration.application.github, tagName);
   }
 
-  const loadIndex = async (statusCode: number, route: string|undefined = undefined) => {
+  const loadIndex = async (req: Request, statusCode: number, route: string|undefined = undefined) => {
     let index = fs.readFileSync(__dirname + '/frontend/build/index.html').toString();
     const extendedSiteConfiguration: ExtendedSiteConfiguration = {
       ...siteConfiguration,
@@ -99,6 +91,7 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
       },
       site: {
         ...siteConfiguration.site,
+        basePath: req.baseUrl,
         statusCode: statusCode,
       },
       privacyPolicy: !siteConfiguration.privacyPolicy 
@@ -149,30 +142,30 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
     return index;
   }
 
-  router.use(express.static(path.join(__dirname, '/frontend/build'), { index: false }));
-  router.get(`${basePath}/`, async (_, res) => {
+  router.use('/', express.static(path.join(__dirname, '/frontend/build'), { index: false }));
+  router.get('/', async (req, res) => {
     try {
-      res.status(200).send(await loadIndex(200, '/'));
+      res.status(200).send(await loadIndex(req, 200, '/'));
     } catch (error) {
-      res.status(500).send(await loadIndex(500));
+      res.status(500).send(await loadIndex(req, 500));
     }
   });
   
-  router.get(`${basePath}/privacy-policy`, async (_, res) => {
+  router.get('/privacy-policy', async (req, res) => {
     try {
       if (!siteConfiguration.privacyPolicy) {
-        res.status(404).send(await loadIndex(404));
+        res.status(404).send(await loadIndex(req, 404));
       } else if (typeof siteConfiguration.privacyPolicy === 'string') {
         res.status(200).redirect(siteConfiguration.privacyPolicy);
       } else {
-        res.status(200).send(await loadIndex(200, '/privacy-policy'));
+        res.status(200).send(await loadIndex(req, 200, '/privacy-policy'));
       }
     } catch (error) {
-      res.status(500).send(await loadIndex(500));
+      res.status(500).send(await loadIndex(req, 500));
     }
   });
   
-  router.get(`${basePath}/download`, async (_, res) => {
+  router.get('/download', async (req, res) => {
     try {
       if (!siteConfiguration.application.downloadLink) {
         const release = await getRelease();
@@ -181,11 +174,11 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
         res.redirect(siteConfiguration.application.downloadLink);
       }
     } catch (error) {
-      res.status(500).send(await loadIndex(500));
+      res.status(500).send(await loadIndex(req, 500));
     }
   });
   
-  router.get(`${basePath}/about.json`, async (_, res) => {
+  router.get('/about.json', async (req, res) => {
     try {
       const tagName = await getTagName();
       const release = await getRelease();
@@ -200,34 +193,34 @@ const downloadPageRouter = (options?: SiteConfiguration) => {
   
       res.status(200).json(about);
     } catch (error) {
-      res.status(500).send(await loadIndex(500));
+      res.status(500).send(await loadIndex(req, 500));
     }
   });
   
-  router.get(`${basePath}/release.svg`, async (_, res) => {
+  router.get('/release.svg', async (req, res) => {
     try {
       res.setHeader('Content-type', 'image/svg+xml');
       res.status(200).send(await SheildsIO.createReleaseBadge(await getTagName()));
     } catch (error) {
-      res.status(500).send(await loadIndex(500));
+      res.status(500).send(await loadIndex(req, 500));
     }
   });
   
-  router.get(`${basePath}/downloads.svg`, async (_, res) => {
+  router.get('/downloads.svg', async (req, res) => {
     try {
       const downloadCount = await GitHub.getDownloadCount(siteConfiguration.application.github);
       res.setHeader('Content-type', 'image/svg+xml');
       res.status(200).send(await SheildsIO.createDownloadsBadge(downloadCount));
     } catch (error) {
-      res.status(500).send(await loadIndex(500));
+      res.status(500).send(await loadIndex(req, 500));
     }
   });
   
-  router.get(`${basePath}/*`, async (_, res) => {
+  router.get('/*', async (req, res) => {
     try {
-      res.status(404).send(await loadIndex(404));
+      res.status(404).send(await loadIndex(req, 404));
     } catch (error) {
-      res.status(500).send(await loadIndex(500));
+      res.status(500).send(await loadIndex(req, 500));
     }
   });
 

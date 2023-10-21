@@ -189,7 +189,7 @@ function Header() {
           <InfoItem name="Download Size" value={formatSize(window.siteConfiguration.application.size ?? NaN)} />
         </Stack>
         <Box sx={{display: greaterThan600 ? 'flex' : 'block', mt: 3, gap: 2}}>
-          <a href="/download">
+          <a href={`${process.env.PUBLIC_URL}/download`}>
             <Button variant="contained" sx={{width: greaterThan600 ? '200px' : '100%'}}>Download</Button>
           </a>
           <Stack direction="row" spacing={2} mt={greaterThan600 ? 0 : 2}>
