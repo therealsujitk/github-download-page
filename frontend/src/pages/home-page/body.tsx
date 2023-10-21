@@ -86,11 +86,10 @@ function Preview() {
 interface SideLinkProps {
   children: React.ReactNode;
   startIcon: React.ReactNode;
-  href: string|null;
+  href: string;
 }
 
 function SideLink(props: SideLinkProps) {
-  if (props.href == null) return <></>;
 
   return (
     <a href={props.href} target="_blank" rel="noreferrer">
@@ -150,7 +149,9 @@ function Body() {
           </IconButton>
         </Box>
         {isAppSupportOpen && <Stack spacing={1} mt={1}>
-          <SideLink startIcon={<Public />} href={window.siteConfiguration.application.website ?? getGitHub()}>Website</SideLink>
+          {window.siteConfiguration.application.website &&
+            <SideLink startIcon={<Public />} href={window.siteConfiguration.application.website}>Website</SideLink>
+          }
           <SideLink startIcon={<GitHub />} href={getGitHub()}>GitHub Repository</SideLink>
           <SideLink startIcon={<BugReport />} href={window.siteConfiguration.application.bugs ?? `${getGitHub()}/issues`}>Report a Bug</SideLink>
           {window.siteConfiguration.privacyPolicy && 
