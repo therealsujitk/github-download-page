@@ -1,6 +1,6 @@
 {
   "name": "github-download-page",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A beautiful download page for your GitHub project.",
   "main": "./dist/index.js",
   "scripts": {
