@@ -11,6 +11,7 @@ interface Badge {
 };
 
 async function createBadge(badge: Badge) {
+  badge.value = badge.value.replace(/-/g, '--');
   const url = new URL(`http://img.shields.io/badge/${badge.key}-${badge.value}-${badge.color}?style=${badge.style}`);
   
   if (cache.has(url.toString())) {

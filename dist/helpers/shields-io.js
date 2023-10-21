@@ -18,6 +18,7 @@ const cache = new node_cache_1.default({ stdTTL: 21600, checkperiod: 3600 });
 ;
 function createBadge(badge) {
     return __awaiter(this, void 0, void 0, function* () {
+        badge.value = badge.value.replace(/-/g, '--');
         const url = new URL(`http://img.shields.io/badge/${badge.key}-${badge.value}-${badge.color}?style=${badge.style}`);
         if (cache.has(url.toString())) {
             return cache.get(url.toString());
