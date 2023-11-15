@@ -38,11 +38,7 @@
     "@types/got": "^9.6.12",
     "@types/node": "^20.8.6",
     "dotenv": "^16.3.1",
-    "pre-commit": "^1.2.2",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
-  },
-  "pre-commit": [
-    "build"
-  ]
+  }
 }
